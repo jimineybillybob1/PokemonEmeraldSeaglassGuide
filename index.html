@@ -127,6 +127,7 @@ header{
 .poke-sprite{display:block;width:72px;height:72px;margin:2px auto 4px;image-rendering:pixelated;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
 .poke-name{font-weight:700;font-size:12px;text-align:center;margin-bottom:5px;line-height:1.2}
 .egg-star{color:var(--gold)}
+.form-indicator{display:inline-block;background:rgba(78,205,196,.15);border:1px solid rgba(78,205,196,.4);color:var(--teal);font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;margin-left:4px;vertical-align:middle}
 .type-badges{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;margin-bottom:4px}
 .tb{padding:2px 7px;border-radius:10px;font-size:9px;font-weight:700;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4)}
 .poke-loc{font-size:10px;color:var(--text2);text-align:center;line-height:1.4;margin-top:2px}
@@ -153,6 +154,13 @@ header{
 .info-val{color:var(--text);flex:1;line-height:1.5}
 .modal-close{position:absolute;top:12px;right:12px;background:none;border:1px solid var(--border);color:var(--text2);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;line-height:1;transition:.2s;z-index:10}
 .modal-close:hover{border-color:var(--gold);color:var(--gold)}
+
+/* FORM TABS (inside Pokémon modal) */
+.form-tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin:-18px -18px 14px;padding:0 18px;background:rgba(2,18,26,.4)}
+.form-tab{background:none;border:none;color:var(--text2);padding:10px 14px;cursor:pointer;font-family:'Exo 2',sans-serif;font-size:12px;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px;transition:.15s;white-space:nowrap}
+.form-tab:hover{color:var(--text)}
+.form-tab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(245,215,110,.04)}
+.form-tab .form-tab-badge{display:inline-block;background:rgba(245,215,110,.15);color:var(--gold);font-size:9px;padding:1px 5px;border-radius:8px;margin-left:6px;font-weight:700;letter-spacing:.3px}
 
 /* ENCOUNTERS */
 .region-block{margin-bottom:16px}
@@ -589,10 +597,9 @@ const POKEMON = [
 {id:164,n:"Arbok",t:["Poison","Dark"],sid:24,loc:["Evolve Ekans"]},
 {id:165,n:"Pichu",t:["Electric"],sid:172,loc:["Petalburg Woods","Route 116","New Mauville"]},
 {id:166,n:"Pikachu",t:["Electric"],sid:25,loc:["Evolve Pichu","Safari Zone SW","New Mauville","Route 110"]},
-{id:167,n:"Raichu",t:["Electric"],sid:26,loc:["Evolve Pikachu","New Mauville"]},
-{id:167,n:"Alolan Raichu",t:["Electric","Psychic"],sid:26,fsid:10100,alolan:1,loc:["Alolan Egg Mauville City"]},
-{id:168,n:"Sandshrew",t:["Ground"],sid:27,loc:["Seafloor Cavern","Mirage Tower","Route 106","Route 111","Route 113"]},
-{id:169,n:"Sandslash",t:["Ground"],sid:28,loc:["Evolve Sandshrew"]},
+{id:167,n:"Raichu",t:["Electric"],sid:26,loc:["Evolve Pikachu","New Mauville"],forms:[{n:"Alolan Raichu",t:["Electric","Psychic"],fsid:10100,loc:["Alolan Egg Mauville City"]}]},
+{id:168,n:"Sandshrew",t:["Ground"],sid:27,loc:["Seafloor Cavern","Mirage Tower","Route 106","Route 111","Route 113"],forms:[{n:"Alolan Sandshrew",t:["Ice","Steel"],fsid:10101,loc:["Alolan Egg Mauville City"]}]},
+{id:169,n:"Sandslash",t:["Ground"],sid:28,loc:["Evolve Sandshrew"],forms:[{n:"Alolan Sandslash",t:["Ice","Steel"],fsid:10102,loc:["Evolve Alolan Sandshrew"]}]},
 {id:170,n:"Nidoran♀",t:["Poison"],sid:29,loc:["Meteor Falls 1F"]},
 {id:171,n:"Nidorina",t:["Poison"],sid:30,loc:["Evolve Nidoran F","Meteor Falls 1F","Safari","Zone SE","Safari Zone SE"]},
 {id:172,n:"Nidoqueen",t:["Poison","Ground"],sid:31,loc:["Evolve Nidorina","Seafloor Cavern"]},
@@ -602,9 +609,8 @@ const POKEMON = [
 {id:176,n:"Cleffa",t:["Fairy"],sid:173,loc:["Rustboro"]},
 {id:177,n:"Clefairy",t:["Fairy"],sid:35,loc:["Evolve Cleffa","Route 112","Route 115"]},
 {id:178,n:"Clefable",t:["Fairy"],sid:36,loc:["Evolve Clefairy"]},
-{id:179,n:"Vulpix",t:["Fire","Fairy"],sid:37,loc:["Dewford","Mt. Pyre Exterior","Route 106","Pyre Exterior"]},
-{id:179,n:"Alolan Vulpix",t:["Ice"],sid:37,fsid:10103,alolan:1,loc:["Alolan Egg Mauville City"]},
-{id:180,n:"Ninetales",t:["Fire","Fairy"],sid:38,loc:["Evolve Vulpix"]},
+{id:179,n:"Vulpix",t:["Fire","Fairy"],sid:37,loc:["Dewford","Mt. Pyre Exterior","Route 106","Pyre Exterior"],forms:[{n:"Alolan Vulpix",t:["Ice"],fsid:10103,loc:["Alolan Egg Mauville City"]}]},
+{id:180,n:"Ninetales",t:["Fire","Fairy"],sid:38,loc:["Evolve Vulpix"],forms:[{n:"Alolan Ninetales",t:["Ice","Fairy"],fsid:10104,loc:["Evolve Alolan Vulpix"]}]},
 {id:181,n:"Igglybuff",t:["Normal","Fairy"],sid:174,loc:["Rustboro"]},
 {id:182,n:"Jigglypuff",t:["Normal","Fairy"],sid:39,loc:["Evolve Igglybuff","Route 112"]},
 {id:183,n:"Wigglytuff",t:["Normal","Fairy"],sid:40,loc:["Evolve Jigglypuff"]},
@@ -619,12 +625,10 @@ const POKEMON = [
 {id:192,n:"Parasect",t:["Bug","Ghost"],sid:47,loc:["Evolve Paras","Route 119","Safari Zone S"]},
 {id:193,n:"Venonat",t:["Bug","Poison"],sid:48,loc:["Route 118"]},
 {id:194,n:"Venomoth",t:["Bug","Poison"],sid:49,loc:["Evolve Venonat","Granite Cave 1F","Fiery Path"]},
-{id:195,n:"Alolan Diglett",t:["Ground","Steel"],sid:50,fsid:10105,alolan:1,loc:["Alolan Egg Mauville City"]},
-{id:196,n:"Dugtrio",t:["Ground"],sid:51,loc:["Evolve Diglett"]},
-{id:196,n:"Alolan Dugtrio",t:["Ground","Steel"],sid:51,fsid:10106,alolan:1,loc:["Evolve Alolan Diglett"]},
-{id:197,n:"Meowth",t:["Normal"],sid:52,loc:["Safari Zone S$","Route 104","Safari Zone S"]},
-{id:198,n:"Persian",t:["Normal"],sid:53,loc:["Evolve Meowth"]},
-{id:198,n:"Alolan Persian",t:["Dark"],sid:53,fsid:10108,alolan:1,loc:["Evolve Alolan Meowth"]},
+{id:195,n:"Diglett",t:["Ground"],sid:50,loc:["Fiery Path","Granite Cave 1F"],forms:[{n:"Alolan Diglett",t:["Ground","Steel"],fsid:10105,loc:["Alolan Egg Mauville City"]}]},
+{id:196,n:"Dugtrio",t:["Ground"],sid:51,loc:["Evolve Diglett"],forms:[{n:"Alolan Dugtrio",t:["Ground","Steel"],fsid:10106,loc:["Evolve Alolan Diglett"]}]},
+{id:197,n:"Meowth",t:["Normal"],sid:52,loc:["Safari Zone S$","Route 104","Safari Zone S"],forms:[{n:"Alolan Meowth",t:["Dark"],fsid:10107,loc:["Alolan Egg Mauville City"]}]},
+{id:198,n:"Persian",t:["Normal"],sid:53,loc:["Evolve Meowth"],forms:[{n:"Alolan Persian",t:["Dark"],fsid:10108,loc:["Evolve Alolan Meowth"]}]},
 {id:199,n:"Psyduck",t:["Water"],sid:54,loc:["Pacifidlog Scuba Safari","Safari Zone NW","Route 104","Route 106","Route 118","Route 109"]},
 {id:200,n:"Golduck",t:["Water","Psychic"],sid:55,loc:["Evolve Psyduck"]},
 {id:201,n:"Mankey",t:["Fighting"],sid:56,loc:["Rustboro","Pacifidlog","Jagged Pass"]},
@@ -647,10 +651,9 @@ const POKEMON = [
 {id:218,n:"Victreebel",t:["Grass","Poison"],sid:71,loc:["Ky Evolve Weepinbell","Route 127"]},
 {id:219,n:"Tentacool",t:["Water","Poison"],sid:72,loc:["Pacifidlog Scuba Safari All Most Surf Locations","Most Surf Locations","Old Rod fishing","Pacifidlog Scuba Safari"]},
 {id:220,n:"Tentacruel",t:["Water","Poison"],sid:73,loc:["Evolve Tentacool","Route 131"]},
-{id:221,n:"Geodude",t:["Rock","Ground"],sid:74,loc:["Granite Cave 1F/B1F","Magma Hideout","Most Rock Smash Rocks"]},
-{id:222,n:"Graveler",t:["Rock","Ground"],sid:75,loc:["Evolve Geodude","Safari Zone NE","Victory Road B2F","Magma Hideout"]},
-{id:223,n:"Golem",t:["Rock","Ground"],sid:76,loc:["Evolve Graveler"]},
-{id:223,n:"Alolan Golem",t:["Rock","Electric"],sid:76,fsid:10111,alolan:1,loc:["Evolve Alolan Graveler"]},
+{id:221,n:"Geodude",t:["Rock","Ground"],sid:74,loc:["Granite Cave 1F/B1F","Magma Hideout","Most Rock Smash Rocks"],forms:[{n:"Alolan Geodude",t:["Rock","Electric"],fsid:10109,loc:["Alolan Egg Mauville City"]}]},
+{id:222,n:"Graveler",t:["Rock","Ground"],sid:75,loc:["Evolve Geodude","Safari Zone NE","Victory Road B2F","Magma Hideout"],forms:[{n:"Alolan Graveler",t:["Rock","Electric"],fsid:10110,loc:["Evolve Alolan Geodude"]}]},
+{id:223,n:"Golem",t:["Rock","Ground"],sid:76,loc:["Evolve Graveler"],forms:[{n:"Alolan Golem",t:["Rock","Electric"],fsid:10111,loc:["Evolve Alolan Graveler"]}]},
 {id:224,n:"Ponyta",t:["Fire"],sid:77,loc:["Route 113","Route 123"]},
 {id:225,n:"Rapidash",t:["Fire"],sid:78,loc:["Evolve Ponyta"]},
 {id:226,n:"Slowpoke",t:["Water","Psychic"],sid:79,loc:["Pacifidlog Town","Pacifidlog Scuba Safari","Safari Zone SE","107 109","Route 122"]},
@@ -664,10 +667,8 @@ const POKEMON = [
 {id:234,n:"Dodrio",t:["Ground","Flying"],sid:85,loc:["Evolve Doduo","Safari Zone SE"]},
 {id:235,n:"Seel",t:["Water","Ice"],sid:86,loc:["Pacifidlog Scuba Safari","Route 118","Route 122","Route 125"]},
 {id:236,n:"Dewgong",t:["Water","Ice"],sid:87,loc:["Evolve Seel","Pacifidlog Scuba Safari","Route 125"]},
-{id:237,n:"Grimer",t:["Poison"],sid:88,loc:["Fiery Path","Seafloor Cavern"]},
-{id:237,n:"Alolan Grimer",t:["Poison","Dark"],sid:88,fsid:10112,alolan:1,loc:["Alolan Egg Mauville City"]},
-{id:238,n:"Muk",t:["Poison"],sid:89,loc:["Evolve Grimer"]},
-{id:238,n:"Alolan Muk",t:["Poison","Dark"],sid:89,fsid:10113,alolan:1,loc:["Evolve Alolan Grimer"]},
+{id:237,n:"Grimer",t:["Poison"],sid:88,loc:["Fiery Path","Seafloor Cavern"],forms:[{n:"Alolan Grimer",t:["Poison","Dark"],fsid:10112,loc:["Alolan Egg Mauville City"]}]},
+{id:238,n:"Muk",t:["Poison"],sid:89,loc:["Evolve Grimer"],forms:[{n:"Alolan Muk",t:["Poison","Dark"],fsid:10113,loc:["Evolve Alolan Grimer"]}]},
 {id:239,n:"Shellder",t:["Water"],sid:90,loc:["Shoal Cave Low Tide","Pacifidlog Scuba Safari","Shellder","Route 106","Route 114"]},
 {id:240,n:"Cloyster",t:["Water","Ice"],sid:91,loc:["Evolve Shellder"]},
 {id:241,n:"Gastly",t:["Ghost","Poison"],sid:92,loc:["Granite Cave B2F","Mt. Pyre Interior","Pyre Interior"]},
@@ -681,9 +682,9 @@ const POKEMON = [
 {id:249,n:"Voltorb",t:["Electric"],sid:100,loc:["New Mauville","Route 110"]},
 {id:250,n:"Electrode",t:["Electric"],sid:101,loc:["Evolve Voltorb","New Mauville"]},
 {id:251,n:"Exeggcute",t:["Grass","Psychic"],sid:102,loc:["Route 119","Safari Zone S"]},
-{id:252,n:"Exeggutor",t:["Grass","Psychic"],sid:103,loc:["Evolve Exeggcute","Route 119","Route 128"]},
+{id:252,n:"Exeggutor",t:["Grass","Psychic"],sid:103,loc:["Evolve Exeggcute","Route 119","Route 128"],forms:[{n:"Alolan Exeggutor",t:["Grass","Dragon"],fsid:10114,loc:["Alolan Egg Mauville City"]}]},
 {id:253,n:"Cubone",t:["Ground"],sid:104,loc:["Granite Cave B2F","Scorched Slab"]},
-{id:254,n:"Marowak",t:["Ground"],sid:105,loc:["Evolve Cubone","Scorched Slab"]},
+{id:254,n:"Marowak",t:["Ground"],sid:105,loc:["Evolve Cubone","Scorched Slab"],forms:[{n:"Alolan Marowak",t:["Fire","Ghost"],fsid:10115,loc:["Alolan Egg Mauville City"]}]},
 {id:255,n:"Tyrogue",t:["Fighting"],sid:236,loc:["Route 117"]},
 {id:256,n:"Hitmonlee",t:["Fighting"],sid:106,loc:["Evolve Tyrogue","Safari Zone N"]},
 {id:257,n:"Hitmonchan",t:["Fighting"],sid:107,loc:["Evolve Tyrogue","Safari Zone N"]},
@@ -859,7 +860,7 @@ const POKEMON = [
 {id:427,n:"Hydrapple",t:["Grass","Dragon"],sid:1019,egg:1,loc:["Evolve Dipplin"]},
 {id:428,n:"Tinkatink",t:["Fairy","Steel"],sid:957,egg:1,loc:["Mauville Game Corner"]},
 {id:429,n:"Tinkatuff",t:["Fairy","Steel"],sid:958,egg:1,loc:["Evolve Tinkatink"]},
-{id:430,n:"Tinkaton",t:["Fairy","Steel"],sid:959,egg:1,loc:["Evolve Tinkatuff"]},
+{id:430,n:"Tinkaton",t:["Fairy","Steel"],sid:959,egg:1,loc:["Evolve Tinkatuff"]}
 ];
 
 const ENCOUNTERS = [
@@ -1311,10 +1312,24 @@ const TYPE_MAP = {
 function tb(type){ return `<span class="tb ${TYPE_MAP[type]||'t-Normal'}">${type}</span>`; }
 
 // ── TYPE LOOKUP (for encounters tab) ──────────────────────────────────────
+// Maps every name (base AND form) to its own type list, so Alolan forms in
+// the Encounters tab render with their Alolan typing (e.g. Alolan Raichu = Electric/Psychic).
 const POKE_TYPES_BY_NAME = {};
-POKEMON.forEach(p => { POKE_TYPES_BY_NAME[norm(p.n)] = p.t; });
+POKEMON.forEach(p => {
+  POKE_TYPES_BY_NAME[norm(p.n)] = p.t;
+  if(p.forms) p.forms.forEach(f => { POKE_TYPES_BY_NAME[norm(f.n)] = f.t; });
+});
 function typesFor(name){ return POKE_TYPES_BY_NAME[norm(name)] || []; }
 function typesBadges(name){ return typesFor(name).map(tb).join(""); }
+
+// ── FORM → BASE NAME LOOKUP ───────────────────────────────────────────────
+// Catching "Alolan Raichu" should mark the base Raichu as caught. This map
+// resolves any form name back to its base Pokémon's canonical name.
+const FORM_TO_BASE = {};
+POKEMON.forEach(p => {
+  if(p.forms) p.forms.forEach(f => { FORM_TO_BASE[norm(f.n)] = p.n; });
+});
+function baseNameFor(name){ return FORM_TO_BASE[norm(name)] || name; }
 
 // ── LOCATION BUBBLES (Pokédex modal) ──────────────────────────────────────
 // Build a normalised region index once
@@ -1414,10 +1429,10 @@ function jumpToEncounterRegion(regionName){
 function getCaught(){ try { return new Set(JSON.parse(localStorage.getItem("seaglass_caught")||"[]")); } catch { return new Set(); } }
 function saveCaught(s){ localStorage.setItem("seaglass_caught", JSON.stringify([...s])); }
 function norm(n){ return n.toLowerCase().replace(/[^a-z0-9]/g,""); }
-function isCaught(name){ return getCaught().has(norm(name)); }
+function isCaught(name){ return getCaught().has(norm(baseNameFor(name))); }
 function toggleCaught(name){
   const s = getCaught();
-  const k = norm(name);
+  const k = norm(baseNameFor(name));  // forms route to base
   if(s.has(k)) s.delete(k); else s.add(k);
   saveCaught(s);
 }
@@ -1475,11 +1490,18 @@ function renderDexGrid(){
   const caught = getCaught();
   let visible = POKEMON;
   if(dexSearch){
-    visible = visible.filter(p =>
-      p.n.toLowerCase().includes(dexSearch) ||
-      String(p.id).includes(dexSearch) ||
-      p.t.some(t => t.toLowerCase().includes(dexSearch))
-    );
+    visible = visible.filter(p => {
+      // Match against base name, base types, ID...
+      if(p.n.toLowerCase().includes(dexSearch)) return true;
+      if(String(p.id).includes(dexSearch)) return true;
+      if(p.t.some(t => t.toLowerCase().includes(dexSearch))) return true;
+      // ...and against any form's name + types
+      if(p.forms && p.forms.some(f =>
+        f.n.toLowerCase().includes(dexSearch) ||
+        f.t.some(t => t.toLowerCase().includes(dexSearch))
+      )) return true;
+      return false;
+    });
   }
   if(dexFilter === "caught")   visible = visible.filter(p => caught.has(norm(p.n)));
   if(dexFilter === "uncaught") visible = visible.filter(p => !caught.has(norm(p.n)));
@@ -1492,10 +1514,13 @@ function renderDexGrid(){
 function renderCard(p, caught){
   const c = caught.has(norm(p.n));
   const spr = pSprite(p);
+  const formBadge = p.forms && p.forms.length
+    ? `<span class="form-indicator" title="Has ${p.forms.length} alternate form${p.forms.length>1?'s':''}">+${p.forms.length}</span>`
+    : '';
   return `<div class="poke-card${c?' caught':''}${p.egg?' egg':''}" onclick="openModal(${p.id})">
     <div class="poke-card-top">
       <span class="poke-num">#${String(p.id).padStart(3,"0")}</span>
-      <span>${p.egg?'<span class="egg-star" title="Easter Egg Pokémon">⭐</span>':''}</span>
+      <span>${p.egg?'<span class="egg-star" title="Easter Egg Pokémon">⭐</span>':''}${formBadge}</span>
       <button class="catch-btn${c?' caught':''}" data-pn="${p.n}" onclick="event.stopPropagation();const _n=this.dataset.pn;toggleCaught(_n);renderDexGrid();buildEncounters();" title="${c?'Caught – click to unmark':'Mark as caught'}">${c?'✓':''}</button>
     </div>
     <img class="poke-sprite" src="${spr}" alt="${p.n}" loading="lazy" onerror="this.style.opacity='.3'">
@@ -1519,13 +1544,28 @@ function updateDexProgress(){
 function openModal(id){
   const p = POKEMON.find(x => x.id === id);
   if(!p) return;
+  // Show the base form by default
+  renderModalForForm(p, 0);
+  document.getElementById("modal-overlay").classList.add("open");
+}
+
+// Render the modal body for a specific form index (0 = base, 1+ = forms[i-1])
+function renderModalForForm(p, formIdx){
+  const isBase = formIdx === 0;
+  const variant = isBase ? p : p.forms[formIdx - 1];
+  // For sprite lookup, build a pseudo-entry that pSprite understands
+  const variantForSprite = isBase ? p : {n: variant.n, fsid: variant.fsid, sid: p.sid};
+  const spr = pSprite(variantForSprite);
+  // Caught state always reflects the BASE Pokémon (forms share catch status)
   const c = isCaught(p.n);
-  const spr = pSprite(p);
+  // Display name for the header
+  const displayName = isBase ? p.n : variant.n;
+
   document.getElementById("modal-head").innerHTML = `
-    <img class="modal-sprite" src="${spr}" alt="${p.n}" onerror="this.style.opacity='.2'">
+    <img class="modal-sprite" src="${spr}" alt="${displayName}" onerror="this.style.opacity='.2'">
     <div class="modal-info">
-      <h2>#${String(p.id).padStart(3,"0")} ${p.n} ${p.egg?'⭐':''}</h2>
-      <div class="type-badges" style="justify-content:flex-start">${p.t.map(tb).join('')}</div>
+      <h2>#${String(p.id).padStart(3,"0")} ${displayName} ${p.egg?'⭐':''}</h2>
+      <div class="type-badges" style="justify-content:flex-start">${variant.t.map(tb).join('')}</div>
       <div style="margin-top:8px">
         <button class="filter-btn${c?' active':''}" style="font-size:12px;padding:5px 12px"
           data-pn="${p.n}"
@@ -1535,21 +1575,40 @@ function openModal(id){
       </div>
     </div>`;
 
+  // Build form tabs if this Pokémon has alternate forms
+  let formTabsHtml = "";
+  if(p.forms && p.forms.length){
+    const tabs = [];
+    tabs.push(`<button class="form-tab${formIdx===0?' active':''}" onclick="renderModalForForm(POKEMON.find(x=>x.id===${p.id}),0)">${p.n}</button>`);
+    p.forms.forEach((f, i) => {
+      // Strip the base name from the form label, e.g. "Alolan Raichu" → "Alolan"
+      let label = f.n;
+      if(label.startsWith(p.n + " ")) label = label.slice(p.n.length + 1);
+      else if(label.endsWith(" " + p.n)) label = label.slice(0, -(p.n.length + 1));
+      tabs.push(`<button class="form-tab${formIdx===i+1?' active':''}" onclick="renderModalForForm(POKEMON.find(x=>x.id===${p.id}),${i+1})">${label}<span class="form-tab-badge">FORM</span></button>`);
+    });
+    formTabsHtml = `<div class="form-tabs">${tabs.join("")}</div>`;
+  }
+
   const natIdLine = p.sid ? `<div class="info-row"><span class="info-lbl">National №:</span><span class="info-val">#${String(p.sid).padStart(3,"0")}</span></div>` : "";
   const eggBadge = p.egg
     ? `<div style="background:rgba(245,215,110,.08);border:1px solid rgba(245,215,110,.25);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--gold);margin-bottom:10px">⭐ Easter-Egg Pokémon (bonus content)</div>`
     : "";
+  const formNote = !isBase
+    ? `<div style="background:rgba(78,205,196,.07);border:1px solid rgba(78,205,196,.25);border-radius:6px;padding:8px 12px;font-size:11px;color:var(--text2);margin-bottom:10px;line-height:1.5">📝 This is an alternate form of <strong style="color:var(--teal)">${p.n}</strong>. Catching any form marks ${p.n} as caught in your Pokédex.</div>`
+    : "";
 
   document.getElementById("modal-body").innerHTML = `
+    ${formTabsHtml}
     ${eggBadge}
-    <div class="info-row"><span class="info-lbl">Seaglass №:</span><span class="info-val">#${String(p.id).padStart(3,"0")}</span></div>
+    ${formNote}
+    <div class="info-row"><span class="info-lbl">Hoenn №:</span><span class="info-val">#${String(p.id).padStart(3,"0")}</span></div>
     ${natIdLine}
-    <div class="info-row"><span class="info-lbl">Types:</span><span class="info-val">${p.t.map(tb).join('')}</span></div>
-    <div class="info-row"><span class="info-lbl">Location:</span><span class="info-val">${renderLocationBubbles(p.loc)}</span></div>
+    <div class="info-row"><span class="info-lbl">Types:</span><span class="info-val">${variant.t.map(tb).join('')}</span></div>
+    <div class="info-row"><span class="info-lbl">Location:</span><span class="info-val">${renderLocationBubbles(variant.loc)}</span></div>
     <p style="margin-top:14px;font-size:11px;color:var(--text2);line-height:1.5;border-top:1px solid var(--border);padding-top:10px">
       <strong style="color:var(--teal)">💡 Tip:</strong> The in-game Pokédex in Emerald Seaglass has been upgraded to show detailed stats, abilities, evolution methods, and movesets. Use it!
     </p>`;
-  document.getElementById("modal-overlay").classList.add("open");
 }
 
 function closeModal(e){ if(e.target.id === "modal-overlay") closeModalBtn(); }
@@ -1557,8 +1616,21 @@ function closeModalBtn(){ document.getElementById("modal-overlay").classList.rem
 document.addEventListener("keydown", e => { if(e.key === "Escape") closeModalBtn(); });
 
 function openModalByName(name){
-  const p = POKEMON.find(x => x.n === name);
-  if(p) openModal(p.id);
+  const nKey = norm(name);
+  // First, try direct base-name match
+  let p = POKEMON.find(x => norm(x.n) === nKey);
+  if(p){ openModal(p.id); return; }
+  // Otherwise it might be a form name (e.g. "Alolan Raichu")
+  for(const pk of POKEMON){
+    if(!pk.forms) continue;
+    const idx = pk.forms.findIndex(f => norm(f.n) === nKey);
+    if(idx !== -1){
+      // Open modal pre-selecting that form
+      renderModalForForm(pk, idx + 1);
+      document.getElementById("modal-overlay").classList.add("open");
+      return;
+    }
+  }
 }
 
 // ═════════════════════════════════════════════════════════════════════════
@@ -1587,9 +1659,10 @@ function buildEncounters(){
     ENCOUNTERS.forEach(r => collapsedEncRegions.add(r.region));
   }
   const caught = getCaught();
-  // Progress: all unique Pokémon listed in encounters
+  // Progress: all unique Pokémon (by base name) listed in encounters
+  // Alolan form encounters resolve to their base, so they don't double-count.
   const allPokes = new Set();
-  ENCOUNTERS.forEach(r => r.slots.forEach(s => s.enc.forEach(e => allPokes.add(norm(e.name)))));
+  ENCOUNTERS.forEach(r => r.slots.forEach(s => s.enc.forEach(e => allPokes.add(norm(baseNameFor(e.name))))));
   const n = [...allPokes].filter(x => caught.has(x)).length;
   const total = allPokes.size;
   const pct = total ? Math.round(n / total * 100) : 0;
@@ -1668,9 +1741,11 @@ function toggleCaughtEnc(name, btn){
   btn.classList.toggle("caught", c);
   btn.textContent = c ? "✓" : "";
   renderDexGrid();
-  // Re-sync any matching buttons on other rows
+  // Re-sync any buttons whose name resolves to the same base Pokémon
+  // (so toggling Alolan Raichu also toggles regular Raichu's button)
+  const targetBase = norm(baseNameFor(name));
   document.querySelectorAll(".enc-cb").forEach(b => {
-    if(b.dataset.pn === name){
+    if(norm(baseNameFor(b.dataset.pn)) === targetBase){
       b.classList.toggle("caught", c);
       b.textContent = c ? "✓" : "";
     }
